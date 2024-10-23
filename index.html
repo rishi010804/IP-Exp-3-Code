@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rishi's E-Mart Website</title>
+
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="bg-primary text-white text-center py-4">
+      <h1>Rishi's E-Mart Store</h1>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Welcome to Rishi's E-Mart Website</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Products</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#cartSection">Cart</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container my-5">
+      <h2 class="text-center mb-4">Featured Products</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <img
+              src="Gaming Mouse Photo.jpg"
+              class="card-img-top"
+              alt="Gaming Mouse"
+              width="150"
+              height="150"
+            />
+            <div class="card-body">
+              <h5 class="card-title">Gaming Mouse</h5>
+              <p class="card-text">RS 2000</p>
+              <button
+                class="btn btn-primary add-to-cart"
+                data-name="Gaming Mouse"
+                data-price="2000"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <img
+              src="Gaming Keyboard Photo.jpeg"
+              class="card-img-top"
+              alt="Gaming Keyboard"
+              width="150"
+              height="150"
+            />
+            <div class="card-body">
+              <h5 class="card-title">Gaming Keyboard</h5>
+              <p class="card-text">RS 3000</p>
+              <button
+                class="btn btn-primary add-to-cart"
+                data-name="Gaming Keyboard"
+                data-price="3000"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <img
+              src="Xbox Controller.jpg"
+              class="card-img-top"
+              alt="Xbox Controller"
+              width="150"
+              height="150"
+            />
+            <div class="card-body">
+              <h5 class="card-title">Xbox Controller</h5>
+              <p class="card-text">RS 5000</p>
+              <button
+                class="btn btn-primary add-to-cart"
+                data-name="Xbox Controller"
+                data-price="5000"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cart Section -->
+      <section id="cartSection" class="mt-5">
+        <h2 class="text-center mb-4">Cart</h2>
+        <ul class="list-group" id="cartItems">
+          <li class="list-group-item text-center">Your cart is empty.</li>
+        </ul>
+        <div class="text-right mt-3">
+          <h4>Total: RS <span id="totalPrice">0</span></h4>
+        </div>
+      </section>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3">
+      <p>&copy; 2024 My E-commerce Store</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      // Handle Add to Cart functionality
+      document.querySelectorAll(".add-to-cart").forEach((button) => {
+        button.addEventListener("click", function () {
+          const productName = this.getAttribute("data-name");
+          const productPrice = parseFloat(this.getAttribute("data-price"));
+
+          const cartItems = document.getElementById("cartItems");
+
+          // Check if cart is initially empty
+          if (cartItems.children[0].innerText === "Your cart is empty.") {
+            cartItems.innerHTML = "";
+          }
+
+          // Add the item to the cart
+          const newItem = document.createElement("li");
+          newItem.classList.add(
+            "list-group-item",
+            "d-flex",
+            "justify-content-between",
+            "align-items-center"
+          );
+          newItem.innerHTML = `${productName} - RS ${productPrice}
+            <button class="btn btn-danger btn-sm remove-from-cart">Remove</button>`;
+
+          // Add remove functionality
+          newItem
+            .querySelector(".remove-from-cart")
+            .addEventListener("click", function () {
+              newItem.remove();
+              updateTotalPrice();
+              // Show "cart is empty" message if no items are left
+              if (cartItems.children.length === 0) {
+                cartItems.innerHTML =
+                  '<li class="list-group-item text-center">Your cart is empty.</li>';
+              }
+            });
+
+          cartItems.appendChild(newItem);
+          updateTotalPrice();
+        });
+      });
+
+      // Update total price
+      function updateTotalPrice() {
+        const cartItems = document.getElementById("cartItems").children;
+        let total = 0;
+        for (let item of cartItems) {
+          if (item.innerText !== "Your cart is empty.") {
+            const price = parseFloat(item.innerText.split("RS ")[1]);
+            total += price;
+          }
+        }
+        document.getElementById("totalPrice").innerText = total;
+      }
+    </script>
+  </body>
+</html>
